@@ -5,6 +5,8 @@ import pytest
 from functools import wraps
 from OpenGL.GLUT import glutInit
 
+WAYLAND = os.environ.get('XDG_SESSION_TYPE') == 'wayland'
+
 try:
     import numpy
 except ImportError:
@@ -16,16 +18,29 @@ log = logging.getLogger(__name__)
 def glx_only(func):
     @wraps(func)
     def glx_only_test(*args, **named):
+        if WAYLAND:
+            pytest.skip('GLX is not wayland compatible generally')
         if not sys.platform in ('linux', 'linux2'):
             pytest.skip('Linux-only')
         return func(*args, **named)
 
     return glx_only_test
 
+def xlib_only(func):
+    @wraps(func)
+    def xlib_only_test(*args, **named):
+        if WAYLAND:
+            pytest.skip('Raw XLIB operations do not work on wayland')
+        return func(*args, **named)
+
+    return xlib_only_test
+
 
 def glut_only(func):
     @wraps(func)
     def glut_only_test(*args, **named):
+        if WAYLAND:
+            pytest.skip('GLUT has poor wayland support')
         if not glutInit:
             pytest.skip('No GLUT installed')
         return func(*args, **named)
@@ -100,23 +115,27 @@ def test_check_crash_on_glutinit():
 
 
 @numpy_only
+@xlib_only
 @check_test
 def test_check_egl_es1():
     """Checks egl with es1 under pygame"""
 
 
 @numpy_only
+@xlib_only
 @check_test
 def test_check_egl_es2():
     """Checks egl with es2 under pygame"""
 
 
 @numpy_only
+@xlib_only
 @check_test
 def test_check_egl_opengl():
     """Checks egl with opengl under pygame"""
 
 
+@xlib_only
 @check_test
 def test_check_egl_platform_ext():
     """Checks egl display platform directly from render devices"""

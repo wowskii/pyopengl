@@ -123,3 +123,12 @@ class EGLPlatform( baseplatform.BasePlatform ):
         internal = 'glut' + "".join( [x.title() for x in name] )
         pointer = ctypes.c_void_p.in_dll( self.GLUT, internal )
         return ctypes.c_void_p(ctypes.addressof(pointer))
+
+    def install(self, namespace):
+        """Work around SDL not recognising wayland as platform by default"""
+        result = super(EGLPlatform,self).install(namespace)
+        import os
+        if os.environ.get('XDG_SESSION_TYPE') == 'wayland':
+            if not os.environ.get('SDL_VIDEODRIVER'):
+                os.environ['SDL_VIDEODRIVER'] = 'wayland'
+        return result
