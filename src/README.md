@@ -9,7 +9,7 @@ cd src
 ./xml_generate.py
 ```
 which will clone and/or update the local checkout of the Khronos
-registry and then parse the source XML files to decide what to 
+registry and then parse the source XML files to decide what to
 generate in the `OpenGL/raw` hierarchy of PyOpenGL.
 
 ## Updating Secondary Definitions
