@@ -11,3 +11,6 @@ accelerate/dist
 mmap-test-data.dat
 .tox
 tests/output.ppm
+
+accelerate/manylinux-dist/
+accelerate/src/*.c
