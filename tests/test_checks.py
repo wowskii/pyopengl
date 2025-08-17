@@ -17,7 +17,7 @@ def glx_only(func):
     @wraps(func)
     def glx_only_test(*args, **named):
         if not sys.platform in ('linux', 'linux2'):
-            pytest.skip("Linux-only")
+            pytest.skip('Linux-only')
         return func(*args, **named)
 
     return glx_only_test
@@ -27,7 +27,7 @@ def glut_only(func):
     @wraps(func)
     def glut_only_test(*args, **named):
         if not glutInit:
-            pytest.skip("No GLUT installed")
+            pytest.skip('No GLUT installed')
         return func(*args, **named)
 
     return glut_only_test
@@ -37,7 +37,7 @@ def numpy_only(func):
     @wraps(func)
     def glut_only_test(*args, **named):
         if not numpy:
-            pytest.skip("No GLUT installed")
+            pytest.skip('No GLUT installed')
         return func(*args, **named)
 
     return glut_only_test
@@ -49,7 +49,7 @@ def check_test(func):
 
     @wraps(func)
     def test_x():
-        log.info("Starting test: %s", filename)
+        log.info('Starting test: %s', filename)
         pipe = subprocess.Popen(
             [
                 sys.executable,
@@ -61,34 +61,34 @@ def check_test(func):
         try:
             stdout, stderr = pipe.communicate()
         except subprocess.TimeoutExpired:
-            log.warning("TIMEOUT on %s", filename)
+            log.warning('TIMEOUT on %s', filename)
             pipe.kill()
             raise
         except subprocess.CalledProcessError as err:
-            log.warning("ERROR reported by process: %s", err)
+            log.warning('ERROR reported by process: %s', err)
             raise
         output = stdout.decode('utf-8', errors='ignore')
         lines = [x.strip() for x in output.strip().splitlines()]
         if not lines:
             log.error(
-                "Test did not produce output: %s",
+                'Test did not produce output: %s',
                 stderr.decode('utf-8', errors='ignore'),
             )
             raise RuntimeError('Test script failure on %s' % (func.__name__))
         if 'SKIP' in lines:
-            raise pytest.skip("Skipped by executable on %s" % (func.__name__))
+            raise pytest.skip('Skipped by executable on %s' % (func.__name__))
         elif 'OK' in lines:
             return
         else:
             log.error(
-                "Failing check script stderr: %s",
+                'Failing check script stderr: %s',
                 stderr.decode('utf-8', errors='ignore'),
             )
             log.error(
-                "Failing check script stdout: %s",
+                'Failing check script stdout: %s',
                 output,
             )
-            raise RuntimeError("Test Failed")
+            raise RuntimeError('Test Failed')
 
     return test_x
 
@@ -240,6 +240,10 @@ def test_test_glgetactiveuniform():
     """Test use of gldouble array in ctypes"""
 
 
+@pytest.mark.xfail(
+    condition=sys.version_info[:2] > (3, 11),
+    reason='Python 3.12+ JIT consumes RAM during this test which the crude memory bookkeeping cannot track',
+)
 @check_test
 def test_test_glgetfloat_leak():
     """Test use of gldouble array in ctypes"""
