@@ -1,48 +1,47 @@
-"""OpenGL extension ARB.shader_objects
+'''OpenGL extension ARB.shader_objects
 
-This module customises the behaviour of the
-OpenGL.raw.GL.ARB.shader_objects to provide a more
+This module customises the behaviour of the 
+OpenGL.raw.GL.ARB.shader_objects to provide a more 
 Python-friendly API
 
 Overview (from the spec)
-
-        This extension adds API calls that are necessary to manage shader
-        objects and program objects as defined in the OpenGL 2.0 white papers by
-        3Dlabs.
-
-        The generation of an executable that runs on one of OpenGL's
-        programmable units is modeled to that of developing a typical C/C++
-        application. There are one or more source files, each of which are
-        stored by OpenGL in a shader object. Each shader object (source file)
-        needs to be compiled and attached to a program object. Once all shader
-        objects are compiled successfully, the program object needs to be linked
-        to produce an executable. This executable is part of the program object,
-        and can now be loaded onto the programmable units to make it part of the
-        current OpenGL state. Both the compile and link stages generate a text
-        string that can be queried to get more information. This information
-        could be, but is not limited to, compile errors, link errors,
-        optimization hints, etc. Values for uniform variables, declared in a
-        shader, can be set by the application and used to control a shader's
-        behavior.
-
-        This extension defines functions for creating shader objects and program
-        objects, for compiling shader objects, for linking program objects, for
-        attaching shader objects to program objects, and for using a program
-        object as part of current state. Functions to load uniform values are
-        also defined. Some house keeping functions, like deleting an object and
-        querying object state, are also provided.
-
-        Although this extension defines the API for creating shader objects, it
-        does not define any specific types of shader objects. It is assumed that
-        this extension will be implemented along with at least one such
-        additional extension for creating a specific type of OpenGL 2.0 shader
-        (e.g., the ARB_fragment_shader extension or the ARB_vertex_shader
-        extension).
+	
+	This extension adds API calls that are necessary to manage shader
+	objects and program objects as defined in the OpenGL 2.0 white papers by
+	3Dlabs.
+	
+	The generation of an executable that runs on one of OpenGL's
+	programmable units is modeled to that of developing a typical C/C++
+	application. There are one or more source files, each of which are
+	stored by OpenGL in a shader object. Each shader object (source file)
+	needs to be compiled and attached to a program object. Once all shader
+	objects are compiled successfully, the program object needs to be linked
+	to produce an executable. This executable is part of the program object,
+	and can now be loaded onto the programmable units to make it part of the
+	current OpenGL state. Both the compile and link stages generate a text
+	string that can be queried to get more information. This information
+	could be, but is not limited to, compile errors, link errors,
+	optimization hints, etc. Values for uniform variables, declared in a
+	shader, can be set by the application and used to control a shader's
+	behavior.
+	
+	This extension defines functions for creating shader objects and program
+	objects, for compiling shader objects, for linking program objects, for
+	attaching shader objects to program objects, and for using a program
+	object as part of current state. Functions to load uniform values are
+	also defined. Some house keeping functions, like deleting an object and
+	querying object state, are also provided.
+	
+	Although this extension defines the API for creating shader objects, it
+	does not define any specific types of shader objects. It is assumed that
+	this extension will be implemented along with at least one such
+	additional extension for creating a specific type of OpenGL 2.0 shader
+	(e.g., the ARB_fragment_shader extension or the ARB_vertex_shader
+	extension).
 
 The official definition of this extension is available here:
 http://www.opengl.org/registry/specs/ARB/shader_objects.txt
-"""
-
+'''
 from OpenGL import platform, constant, arrays
 from OpenGL import extensions, wrapper
 import ctypes
@@ -50,78 +49,93 @@ from OpenGL.raw.GL import _types, _glgets
 from OpenGL.raw.GL.ARB.shader_objects import *
 from OpenGL.raw.GL.ARB.shader_objects import _EXTENSION_NAME
 
-
 def glInitShaderObjectsARB():
-    """Return boolean indicating whether this extension is available"""
+    '''Return boolean indicating whether this extension is available'''
     from OpenGL import extensions
-
-    return extensions.hasGLExtension(_EXTENSION_NAME)
-
+    return extensions.hasGLExtension( _EXTENSION_NAME )
 
 # INPUT glShaderSourceARB.length size not checked against count
 # INPUT glShaderSourceARB.string size not checked against count
-glShaderSourceARB = (
-    wrapper.wrapper(glShaderSourceARB)
-    .setInputArraySize('length', None)
-    .setInputArraySize('string', None)
+glShaderSourceARB=wrapper.wrapper(glShaderSourceARB).setInputArraySize(
+    'length', None
+).setInputArraySize(
+    'string', None
 )
 # INPUT glUniform1fvARB.value size not checked against count
-glUniform1fvARB = wrapper.wrapper(glUniform1fvARB).setInputArraySize('value', None)
+glUniform1fvARB=wrapper.wrapper(glUniform1fvARB).setInputArraySize(
+    'value', None
+)
 # INPUT glUniform2fvARB.value size not checked against count*2
-glUniform2fvARB = wrapper.wrapper(glUniform2fvARB).setInputArraySize('value', None)
+glUniform2fvARB=wrapper.wrapper(glUniform2fvARB).setInputArraySize(
+    'value', None
+)
 # INPUT glUniform3fvARB.value size not checked against count*3
-glUniform3fvARB = wrapper.wrapper(glUniform3fvARB).setInputArraySize('value', None)
+glUniform3fvARB=wrapper.wrapper(glUniform3fvARB).setInputArraySize(
+    'value', None
+)
 # INPUT glUniform4fvARB.value size not checked against count*4
-glUniform4fvARB = wrapper.wrapper(glUniform4fvARB).setInputArraySize('value', None)
+glUniform4fvARB=wrapper.wrapper(glUniform4fvARB).setInputArraySize(
+    'value', None
+)
 # INPUT glUniform1ivARB.value size not checked against count
-glUniform1ivARB = wrapper.wrapper(glUniform1ivARB).setInputArraySize('value', None)
+glUniform1ivARB=wrapper.wrapper(glUniform1ivARB).setInputArraySize(
+    'value', None
+)
 # INPUT glUniform2ivARB.value size not checked against count*2
-glUniform2ivARB = wrapper.wrapper(glUniform2ivARB).setInputArraySize('value', None)
+glUniform2ivARB=wrapper.wrapper(glUniform2ivARB).setInputArraySize(
+    'value', None
+)
 # INPUT glUniform3ivARB.value size not checked against count*3
-glUniform3ivARB = wrapper.wrapper(glUniform3ivARB).setInputArraySize('value', None)
+glUniform3ivARB=wrapper.wrapper(glUniform3ivARB).setInputArraySize(
+    'value', None
+)
 # INPUT glUniform4ivARB.value size not checked against count*4
-glUniform4ivARB = wrapper.wrapper(glUniform4ivARB).setInputArraySize('value', None)
+glUniform4ivARB=wrapper.wrapper(glUniform4ivARB).setInputArraySize(
+    'value', None
+)
 # INPUT glUniformMatrix2fvARB.value size not checked against count*4
-glUniformMatrix2fvARB = wrapper.wrapper(glUniformMatrix2fvARB).setInputArraySize(
+glUniformMatrix2fvARB=wrapper.wrapper(glUniformMatrix2fvARB).setInputArraySize(
     'value', None
 )
 # INPUT glUniformMatrix3fvARB.value size not checked against count*9
-glUniformMatrix3fvARB = wrapper.wrapper(glUniformMatrix3fvARB).setInputArraySize(
+glUniformMatrix3fvARB=wrapper.wrapper(glUniformMatrix3fvARB).setInputArraySize(
     'value', None
 )
 # INPUT glUniformMatrix4fvARB.value size not checked against count*16
-glUniformMatrix4fvARB = wrapper.wrapper(glUniformMatrix4fvARB).setInputArraySize(
+glUniformMatrix4fvARB=wrapper.wrapper(glUniformMatrix4fvARB).setInputArraySize(
     'value', None
 )
-glGetObjectParameterfvARB = wrapper.wrapper(glGetObjectParameterfvARB).setOutput(
-    'params', size=_glgets._glget_size_mapping, pnameArg='pname', orPassIn=True
+glGetObjectParameterfvARB=wrapper.wrapper(glGetObjectParameterfvARB).setOutput(
+    'params',size=_glgets._glget_size_mapping,pnameArg='pname',orPassIn=True
 )
-glGetObjectParameterivARB = wrapper.wrapper(glGetObjectParameterivARB).setOutput(
-    'params', size=_glgets._glget_size_mapping, pnameArg='pname', orPassIn=True
+glGetObjectParameterivARB=wrapper.wrapper(glGetObjectParameterivARB).setOutput(
+    'params',size=_glgets._glget_size_mapping,pnameArg='pname',orPassIn=True
 )
-glGetInfoLogARB = (
-    wrapper.wrapper(glGetInfoLogARB)
-    .setOutput('infoLog', size=lambda x: (x,), pnameArg='maxLength', orPassIn=True)
-    .setOutput('length', size=(1,), orPassIn=True)
+glGetInfoLogARB=wrapper.wrapper(glGetInfoLogARB).setOutput(
+    'infoLog',size=lambda x:(x,),pnameArg='maxLength',orPassIn=True
+).setOutput(
+    'length',size=(1,),orPassIn=True
 )
-glGetAttachedObjectsARB = (
-    wrapper.wrapper(glGetAttachedObjectsARB)
-    .setOutput('count', size=(1,), orPassIn=True)
-    .setOutput('obj', size=lambda x: (x,), pnameArg='maxCount', orPassIn=True)
+glGetAttachedObjectsARB=wrapper.wrapper(glGetAttachedObjectsARB).setOutput(
+    'count',size=(1,),orPassIn=True
+).setOutput(
+    'obj',size=lambda x:(x,),pnameArg='maxCount',orPassIn=True
 )
-glGetActiveUniformARB = (
-    wrapper.wrapper(glGetActiveUniformARB)
-    .setOutput('length', size=(1,), orPassIn=True)
-    .setOutput('name', size=lambda x: (x,), pnameArg='maxLength', orPassIn=True)
-    .setOutput('size', size=(1,), orPassIn=True)
-    .setOutput('type', size=(1,), orPassIn=True)
+glGetActiveUniformARB=wrapper.wrapper(glGetActiveUniformARB).setOutput(
+    'length',size=(1,),orPassIn=True
+).setOutput(
+    'name',size=lambda x:(x,),pnameArg='maxLength',orPassIn=True
+).setOutput(
+    'size',size=(1,),orPassIn=True
+).setOutput(
+    'type',size=(1,),orPassIn=True
 )
-# OUTPUT glGetUniformfvARB.params COMPSIZE(programObj, location)
-# OUTPUT glGetUniformivARB.params COMPSIZE(programObj, location)
-glGetShaderSourceARB = (
-    wrapper.wrapper(glGetShaderSourceARB)
-    .setOutput('length', size=(1,), orPassIn=True)
-    .setOutput('source', size=lambda x: (x,), pnameArg='maxLength', orPassIn=True)
+# OUTPUT glGetUniformfvARB.params COMPSIZE(programObj, location) 
+# OUTPUT glGetUniformivARB.params COMPSIZE(programObj, location) 
+glGetShaderSourceARB=wrapper.wrapper(glGetShaderSourceARB).setOutput(
+    'length',size=(1,),orPassIn=True
+).setOutput(
+    'source',size=lambda x:(x,),pnameArg='maxLength',orPassIn=True
 )
 ### END AUTOGENERATED SECTION
 import OpenGL
