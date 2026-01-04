@@ -19,6 +19,17 @@ def glInitImagingARB():
     from OpenGL import extensions
     return extensions.hasGLExtension( _EXTENSION_NAME )
 
+def _get_scalar(value):
+    """Extract scalar from array or return scalar directly.
+
+    Handles both array returns and scalar returns from glGet functions
+    when SIZE_1_ARRAY_UNPACK is enabled.
+    """
+    try:
+        return value[0]
+    except (IndexError, TypeError):
+        return value
+
 # INPUT glColorTable.table size not checked against 'format,type,width'
 glColorTable=wrapper.wrapper(glColorTable).setInputArraySize(
     'table', None
@@ -135,11 +146,11 @@ glConvolutionFilter2D = images.setDimensionsAsInts(
 def glGetConvolutionFilter( baseFunction, target, format, type ):
     """Retrieve 1 or 2D convolution parameter "kernels" as pixel data"""
     dims = (
-        glGetConvolutionParameteriv( target, GL_CONVOLUTION_WIDTH )[0],
+        _get_scalar(glGetConvolutionParameteriv( target, GL_CONVOLUTION_WIDTH )),
     )
     if target != GL_CONVOLUTION_1D:
         dims += (
-            glGetConvolutionParameteriv( target, GL_CONVOLUTION_HEIGHT )[0],
+            _get_scalar(glGetConvolutionParameteriv( target, GL_CONVOLUTION_HEIGHT )),
         )
     # is it always 4?  Seems to be, but the spec/man-page isn't really clear about it...
     dims += (4,)
@@ -156,11 +167,11 @@ def glGetConvolutionFilter( baseFunction, target, format, type ):
 def glGetSeparableFilter( baseFunction, target, format, type ):
     """Retrieve 2 1D convolution parameter "kernels" as pixel data"""
     rowDims = (
-        glGetConvolutionParameteriv( GL_CONVOLUTION_WIDTH )[0],
+        _get_scalar(glGetConvolutionParameteriv( target, GL_CONVOLUTION_WIDTH )),
         4,
     )
     columnDims = (
-        glGetConvolutionParameteriv( GL_CONVOLUTION_HEIGHT )[0],
+        _get_scalar(glGetConvolutionParameteriv( target, GL_CONVOLUTION_HEIGHT )),
         4,
     )
     arrayType = arrays.GL_CONSTANT_TO_ARRAY_TYPE[

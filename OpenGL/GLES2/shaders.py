@@ -68,15 +68,18 @@ class ShaderProgram( int ):
         
         returns (format,binaryData) for the shader program
         """
-        from OpenGL.raw.GL._types import GLint,GLenum 
+        from OpenGL.raw.GL._types import GLint,GLenum
         from OpenGL.arrays import GLbyteArray
         size = GLint()
         glGetProgramiv( self, get_program_binary.GL_PROGRAM_BINARY_LENGTH, size )
         result = GLbyteArray.zeros( (size.value,))
         size2 = GLint()
         format = GLenum()
-        get_program_binary.glGetProgramBinary( self, size.value, size2, format, result )
-        return format.value, result 
+        binary, binaryFormat, length = get_program_binary.glGetProgramBinary(
+            self, size.value, size2, format, result
+        )
+        # format was passed in and filled by the call
+        return format.value, binary 
     def load( self, format, binary ):
         """Attempt to load binary-format for a pre-compiled shader
         

@@ -130,22 +130,25 @@ class ShaderProgram( int ):
 
     def retrieve( self ):
         """Attempt to retrieve binary for this compiled shader
-        
+
         Note that binaries for a program are *not* generally portable,
-        they should be used solely for caching compiled programs for 
+        they should be used solely for caching compiled programs for
         local use; i.e. to reduce compilation overhead.
-        
+
         returns (format,binaryData) for the shader program
         """
-        from OpenGL.raw.GL._types import GLint,GLenum 
+        from OpenGL.raw.GL._types import GLint,GLenum
         from OpenGL.arrays import GLbyteArray
         size = GLint()
         glGetProgramiv( self, get_program_binary.GL_PROGRAM_BINARY_LENGTH, size )
         result = GLbyteArray.zeros( (size.value,))
         size2 = GLint()
         format = GLenum()
-        get_program_binary.glGetProgramBinary( self, size.value, size2, format, result )
-        return format.value, result 
+        binary, binaryFormat, length = get_program_binary.glGetProgramBinary(
+            self, size.value, size2, format, result
+        )
+        # format was passed in and filled by the call
+        return format.value, binary 
     def load( self, format, binary, validate=True ):
         """Attempt to load binary-format for a pre-compiled shader
         
